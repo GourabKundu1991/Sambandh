@@ -12,28 +12,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Alert, AppState, AppStateStatus, BackHandler, LogBox, NativeModules, Platform, SafeAreaView } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
-import messaging from '@react-native-firebase/messaging';
-import notifee,{ AndroidImportance } from '@notifee/react-native';
 
 
 import LoginScreen from './screens/Login';
 import HomeScreen from './screens/Home';
 import LeftMenuBarScreen from './screens/LeftMenuBar';
 import MyPurchaseScreen from './screens/MyPurchase';
-// import DealerInfoScreen from './screens/DealerInformation';
-// import AboutProgramScreen from './screens/AboutProgram';
-// import ContactUsScreen from './screens/Helpdesk';
 import MyCartScreen from './screens/MyCart';
-// import AddressScreen from './screens/Address';
 import ChangeLanguageScreen from './screens/ChangeLanguage';
 import ProductDetailsScreen from './screens/ProductDetails';
 import MyInfluencerScreen from './screens/MyInfluencer';
-// import GalleryScreen from './screens/Gallery';
-// import GalleryDetailsScreen from './screens/GalleryDetails';
-// import AddAddressScreen from './screens/AddAddress';
-// import PerformanceScreen from './screens/Performance';
 import ViewOrdersScreen from './screens/MyOrder';
-// import MyPointsScreen from './screens/MyPoints';
 import PointStatementScreen from './screens/PointStatement';
 import IntroScreen from './screens/Intro';
 import ViewProfileScreen from './screens/MyProfile';
@@ -41,7 +30,6 @@ import RewardsCateScreen from './screens/RewardsCategory';
 import OrderDetailsScreen from './screens/OrderDetails';
 import PurchaseRegistrationScreen from './screens/PurchaseRegistration';
 import InfluencerDetailsScreen from './screens/InfluencerDetails';
-import VerifyPurchaseScreen from './screens/ApprovePurchase';
 import PurchaseDetailsScreen from './screens/PurchaseDetails';
 import PanUploadScreen from './screens/PanUpload';
 import PrivacyPolicyScreen from './screens/PrivacyPolicy';
@@ -88,23 +76,14 @@ const App = () => {
         <Stack.Screen name="InfluencerDetails" component={InfluencerDetailsScreen} />
         <Stack.Screen name="ApprovePurchase" component={ApprovePurchaseScreen} />
         <Stack.Screen name="PurchaseDetails" component={PurchaseDetailsScreen} />
-        {/* <Stack.Screen name="DealerProfile" component={DealerInfoScreen} />
-        <Stack.Screen name="AboutProgram" component={AboutProgramScreen} /> */}
-        {/* <Stack.Screen name="ContactUs" component={ContactUsScreen} /> */}
         <Stack.Screen name="RewardsCatalogue" component={RewardsCateScreen} />
         <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} />
         <Stack.Screen name="Cart" component={MyCartScreen} />
-        {/* <Stack.Screen name="Address" component={AddressScreen} />
-        */}
         <Stack.Screen name="PurchaseRegistration" component={PurchaseRegistrationScreen} />
         <Stack.Screen name="Language" component={ChangeLanguageScreen} />
-        {/* <Stack.Screen name="Gallery" component={GalleryScreen} /> */}
-        {/* <Stack.Screen name="GalleryDetails" component={GalleryDetailsScreen} />
-        <Stack.Screen name="Performance" component={PerformanceScreen} /> */}
         <Stack.Screen name="OrderDetails" component={OrderDetailsScreen} />
         <Stack.Screen name="MyOrder" component={ViewOrdersScreen} />
         <Stack.Screen name="PointStatement" component={PointStatementScreen} />
-        {/* <Stack.Screen name="MyPoints" component={MyPointsScreen} /> */}
         <Stack.Screen name="PanUplode" component={PanUploadScreen} />
         <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
         <Stack.Screen  name="TermsAndConditions" component={TermsConditionsScreen}/>
