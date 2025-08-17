@@ -1,0 +1,10 @@
+# Ignore build files
+android/.gradle/
+android/app/build/
+node_modules/
+
+# Ignore APKs
+*.apk
+
+# Ignore archives
+*.zip
