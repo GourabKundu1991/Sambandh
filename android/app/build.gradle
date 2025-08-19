@@ -78,13 +78,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "lafarge.maitree.loyalty.lafarge"
+    namespace "com.sambandh.plus"
     defaultConfig {
-        applicationId "lafarge.maitree.loyalty.lafarge"
+        applicationId "com.sambandh.plus"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 110206
-        versionName "11.2.6"
+        versionCode 10202
+        versionName "1.2.2"
     }
     signingConfigs {
         debug {

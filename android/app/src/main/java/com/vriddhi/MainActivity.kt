@@ -1,4 +1,4 @@
-package lafarge.maitree.loyalty.lafarge
+package com.sambandh.plus
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
