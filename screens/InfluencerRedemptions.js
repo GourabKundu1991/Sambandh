@@ -23,6 +23,7 @@ const InfluencerRedemptionsScreen = ({ navigation, route }) => {
     const { t } = useTranslation();
     const [loading, setLoading] = React.useState(false);
     const [influencers, setInfluencers] = React.useState([]);
+    const [imageUrl, setImageUrl] = React.useState("");
 
     const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -53,7 +54,7 @@ const InfluencerRedemptionsScreen = ({ navigation, route }) => {
         return unsubscribe;
     }, []);
 
-    const getAllData = (status) => {
+    const getAllData = () => {
         AsyncStorage.getItem('userToken').then(val => {
             if (val != null) {
                 let formdata = new FormData();
@@ -74,6 +75,7 @@ const InfluencerRedemptionsScreen = ({ navigation, route }) => {
                         if (responseJson.bstatus == 1) {
                             setLoading(false);
                             setInfluencers(responseJson.influncers);
+                            setImageUrl(responseJson.image_base_url);
                         } else {
                             Toast.show({ description: responseJson.message });
                             setTimeout(function () {
@@ -110,14 +112,14 @@ const InfluencerRedemptionsScreen = ({ navigation, route }) => {
             <VStack flex={1} backgroundColor={lightColor}>
                 <HeaderComponents component={t("Approve Influencers")} themeColor={orgDetails.color} navigation={navigation} />
                 <ScrollView automaticallyAdjustKeyboardInsets={true}>
-                    <VStack padding={5} space={6}>
+                    <VStack padding={5} space={6}>{/* 
                         <View style={MainStyle.inputbox}>
                             <Input fontFamily={fontBold} size="md" variant="unstyled" placeholder={t('ID / Name / Phone')}
                                 InputLeftElement={<Icon name="search" size={20} color="#000000" style={{ width: 25, marginLeft: 10 }} />} onChangeText={text => setSearchTerm(text)}
                                 InputRightElement={<Button style={[MainStyle.solidbtn, { backgroundColor: 'black', width: 90 }]} onPress={() => onSearch()}>
                                     <Text color={lightColor} fontFamily={fontSemiBold} fontSize="sm">{t('Search')}</Text>
                                 </Button>} />
-                        </View>
+                        </View> */}
                         {influencers.length == 0 && (
                             <LinearGradient
                                 colors={["#f0f2e5", "#ffffff"]}
@@ -143,24 +145,31 @@ const InfluencerRedemptionsScreen = ({ navigation, route }) => {
                                 style={{ borderRadius: 30, overflow: 'hidden', paddingLeft: 20, paddingRight: 20, paddingVertical: 20 }}
                             >
                                 <VStack space={3}>
-                                    <HStack justifyContent="space-between" backgroundColor={lightColor} paddingY={3} paddingX={5} borderRadius={30} overflow={'hidden'}>
-                                        <Text fontSize="sm" color={darkGrey} fontFamily={fontBold}>
-                                            {t("Influencer ID")}
-                                        </Text>
-                                        <Text fontSize="sm" color={darkColor} fontWeight="bold">
-                                            {item.id}
-                                        </Text>
-                                    </HStack>
+                                    <Stack backgroundColor={lightColor} paddingY={3} paddingX={5} borderRadius={30} overflow={'hidden'}>
+                                        <HStack justifyContent="space-between">
+                                            <Text fontSize="sm" color={darkGrey} fontFamily={fontBold}>
+                                                {t("Influencer Name")}:
+                                            </Text>
+                                            <Text fontSize="sm" color={darkColor} fontWeight="bold">
+                                                {item.influencer_name}
+                                            </Text>
+                                        </HStack>
+                                        <HStack justifyContent="space-between">
+                                            <Text fontSize="sm" color={darkGrey} fontFamily={fontBold}>
+                                                {t("Influencer ID")}:
+                                            </Text>
+                                            <Text fontSize="sm" color={darkColor} fontWeight="bold">
+                                                {item.id}
+                                            </Text>
+                                        </HStack>
+                                    </Stack>
                                     <HStack justifyContent={'space-between'} alignItems={'center'}>
-                                        <VStack paddingX={3} width={'70%'}>
+                                        <VStack paddingX={3}space={1} width={'70%'}>
                                             <Text fontSize="md" color={darkColor} fontFamily={fontBold}>
-                                                {item.name}
+                                                {item.product_name}
                                             </Text>
-                                            <Text fontSize="sm" color={darkGrey} fontFamily={fontBold}>
-                                                {t("Category")}: {item.category}
-                                            </Text>
-                                            <Text fontSize="sm" color={darkGrey} fontFamily={fontBold}>
-                                                {t("Date")}: {moment(item.enrollment_date).format("DD-MM-YYYY")}
+                                            <Text fontSize="md" color={darkColor} fontWeight={'bold'}>
+                                                {t("Price in Points")}: {item.prod_price_in_points}
                                             </Text>
                                             <Pressable style={{ marginTop: 10 }} onPress={() => Linking.openURL(`tel:${item.ph_number}`)}>
                                                 <HStack alignItems={'center'} space={2}>
@@ -169,10 +178,20 @@ const InfluencerRedemptionsScreen = ({ navigation, route }) => {
                                                 </HStack>
                                             </Pressable>
                                         </VStack>
-                                        <Button backgroundColor={orgDetails.color} size={'sm'} style={{ width: 90 }} borderRadius={30} overflow={'hidden'} onPress={() => navigation.navigate('InfluencerDetails', { influencerId: item.id })}>
-                                            <Text color={orgDetails.name == "Zuari" ? darkColor : lightColor} fontFamily={fontBold} fontSize="sm">{t('View')}</Text>
-                                        </Button>
+                                        <Box style={{ width: '30%', backgroundColor: '#ffffff', borderColor: greyColor, borderWidth: 1, height: 90, borderRadius: 6, overflow: 'hidden' }}>
+                                            <Image source={{ uri: imageUrl + item.product_images[0].product_image }} style={{ width: '100%', height: 90, resizeMode: 'contain' }} />
+                                        </Box>
                                     </HStack>
+                                    <Stack backgroundColor={lightGrey} paddingY={3} paddingX={5} borderRadius={30} overflow={'hidden'}>
+                                        <HStack justifyContent="space-between" alignItems={'center'}>
+                                            <Text fontSize="md" color={darkGrey} fontFamily={fontBold}>
+                                                {t("Available Point")}:
+                                            </Text>
+                                            <Text fontSize="lg" color={darkColor} fontWeight="bold">
+                                                {item.available_point}
+                                            </Text>
+                                        </HStack>
+                                    </Stack>
                                 </VStack>
                             </LinearGradient>
                         ))}

@@ -1,5 +1,0 @@
-XSym
-0053
-8f882ea641466de847ed302df09e766a
-../../../SocketRocket/SocketRocket/SRSecurityPolicy.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          

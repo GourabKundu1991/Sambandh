@@ -1,5 +1,0 @@
-XSym
-0091
-ae154191ad04dde7a25cbb2d21354105
-../../../../../node_modules/react-native-gesture-handler/apple/Handlers/RNRotationHandler.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    

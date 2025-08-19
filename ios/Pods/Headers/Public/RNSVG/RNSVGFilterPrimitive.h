@@ -1,5 +1,0 @@
-XSym
-0081
-ba288ec57788aaf3d12b88b96df48bd9
-../../../../../node_modules/react-native-svg/apple/Filters/RNSVGFilterPrimitive.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              

@@ -1,5 +1,0 @@
-XSym
-0093
-acef38306736d93f7ca2f0944cdc29c7
-../../../../../node_modules/react-native-gesture-handler/apple/Handlers/RNForceTouchHandler.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  

@@ -1,5 +1,0 @@
-XSym
-0082
-f00488b39485766f66f841707a45e5e1
-../../../../../node_modules/react-native-svg/apple/ViewManagers/RNSVGMaskManager.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

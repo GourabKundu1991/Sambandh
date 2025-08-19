@@ -172,26 +172,9 @@ const HomeScreen = ({ navigation, route }) => {
                 },
                 {
                     text: t("Yes"), onPress: () => {
-                        /* setLoading(true);
-                        setLoading(false); */
                         AsyncStorage.clear();
                         navigation.navigate('Intro');
                         setLanguage('Eng');
-                        /* fetch(`${BASE_URL}/log-out`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                            },
-                            body: ""
-                        })
-                            .then((response) => response.json())
-                            .then((responseJson) => {
-                                
-                            })
-                            .catch((error) => {
-                                setLoading(false);
-                                console.log("Error:", error);
-                            }); */
                     }
                 }
             ],
@@ -210,10 +193,53 @@ const HomeScreen = ({ navigation, route }) => {
     }
 
     const goMemberBase = (itemType, itemName) => {
-        if(userType == "CSI" || userType == "CSH"){
+        if (userType == "CSI" || userType == "CSH") {
             navigation.navigate("CsiCsoDetails", { baseType: itemType, pageName: itemName, user: userType });
         } else {
             navigation.navigate("MemberBase", { baseType: itemType, pageName: itemName, csoID: "" });
+        }
+    }
+
+    const onVerify = () => {
+        if (!agreedDoc) {
+            Toast.show({ description: t("Please read and check Agreed for Document") });
+        } else if (!termsCheck) {
+            Toast.show({ description: t("Please check Terms and Privacy Policy") });
+        } else {
+            setLoading(true);
+            AsyncStorage.getItem('userToken').then(val => {
+                if (val != null) {
+                    let formdata = new FormData();
+                    formdata.append("token", JSON.parse(val).token);
+                    formdata.append("APIkey", `${API_KEY}`);
+                    formdata.append("orgId", JSON.parse(val).orgId);
+                    formdata.append("os_type", `${OS_TYPE}`);
+                    formdata.append("acceptTnc", 1);
+                    fetch(`${BASE_URL}/accept_terms_and_conditions`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        body: formdata
+                    })
+                        .then((response) => response.json())
+                        .then((responseJson) => {
+                            console.log("accept_terms_and_conditions:", responseJson);
+                            if (responseJson.bstatus === 1) {
+                                setTermsPop(false);
+                                getAllData();
+                            } else {
+                                setLoading(false);
+                                Toast.show({ description: responseJson.message });
+                            }
+                        })
+                        .catch((error) => {
+                            setLoading(false);
+                            //console.log("Error:", error);
+                            Toast.show({ description: t("Sorry! Something went wrong. Maybe network request failed.") });
+                        });
+                }
+            });
         }
     }
 
@@ -243,7 +269,7 @@ const HomeScreen = ({ navigation, route }) => {
                     </Box>
                 </VStack>
                 <ScrollView>
-                    {userType != "Influncer"  && (
+                    {userType != "Influncer" && (
                         <VStack paddingTop={8} paddingBottom={5} paddingX={2}>
                             <ScrollView horizontal={true}>
                                 {totalMemberCounts.map((item, index) => (
@@ -300,7 +326,7 @@ const HomeScreen = ({ navigation, route }) => {
             <TouchableOpacity style={styles.floatingButton} onPress={openDialer}>
                 <Icon name="call" size={28} color="#fff" />
             </TouchableOpacity>
-            {/* {termsPop && (
+            {termsPop && (
                 <View style={MainStyle.spincontainer}>
                     <LinearGradient
                         start={{ x: 0, y: 0 }}
@@ -311,7 +337,7 @@ const HomeScreen = ({ navigation, route }) => {
                             <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
                                 {t("Consent form for Data Privacy")}
                             </Text>
-                            <ScrollView height={300}>
+                            <ScrollView height={450}>
                                 <VStack width={250}>
                                     <VStack space={1}>
                                         {[
@@ -362,36 +388,17 @@ const HomeScreen = ({ navigation, route }) => {
                                             <Text width="85%" fontSize="xs" color={darkColor}>{t("I have read and agreed to the terms of and privacy pollicy.")}</Text>
                                         </HStack>
                                     </VStack>
-                                    <HStack>
-                                        <Button style={[MainStyle.solidbtn, { backgroundColor: 'black', width: '100%' }]} onPress={() => onVerify()}>
-                                            <Text color={lightColor} fontFamily={fontSemiBold} fontSize="md">{t('Verify')}</Text>
-                                        </Button>
-                                        <Button variant="unstyled" onPress={() => sendOtp()}>
-                                            <Text color={darkGrey} fontFamily={fontBold} fontSize="sm" textAlign={'center'}>{t('Not getting any OTP?')}</Text>
-                                            <Text color={warningColor} fontFamily={fontBold} fontSize="md" textAlign={'center'}>{t('Resend OTP')}</Text>
-                                        </Button>
-                                    </HStack>
                                 </VStack>
                             </ScrollView>
+                            <HStack>
+                                <Button style={[MainStyle.solidbtn, { backgroundColor: 'black', width: '100%', height: 40 }]} onPress={() => onVerify()}>
+                                    <Text color={lightColor} fontFamily={fontSemiBold} fontSize="sm">{t('Verify')}</Text>
+                                </Button>
+                            </HStack>
                         </VStack>
                     </LinearGradient>
-                    <TouchableOpacity
-                        style={{
-                            textAlign: 'center',
-                            zIndex: 1,
-                            borderWidth: 1,
-                            paddingHorizontal: 40,
-                            paddingVertical: 5,
-                            borderColor: lightColor,
-                            borderRadius: 30,
-                            marginTop: 30
-                        }}
-                        onPress={() => setForOTP(false)}
-                    >
-                        <Text color={lightColor} fontSize="sm">{t('Cancel')}</Text>
-                    </TouchableOpacity>
                 </View>
-            )} */}
+            )}
             {loading && (
                 <View style={MainStyle.spincontainer}>
                     <ActivityIndicator animating={loading} size="large" color={warningColor} />

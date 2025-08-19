@@ -1,5 +1,0 @@
-XSym
-0092
-773735ab24a8f1c6ffc47d0cbf3afd8c
-../../../../../node_modules/react-native-svg/apple/ViewManagers/RNSVGLinearGradientManager.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   

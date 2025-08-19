@@ -1,5 +1,0 @@
-XSym
-0058
-117045012535cd90479b74d03c24bbc5
-../../../SocketRocket/SocketRocket/NSRunLoop+SRWebSocket.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

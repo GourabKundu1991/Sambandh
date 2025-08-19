@@ -1,5 +1,0 @@
-XSym
-0048
-c9286a18a2b15ba73ffb77b04448436d
-../../../SocketRocket/SocketRocket/SRWebSocket.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               

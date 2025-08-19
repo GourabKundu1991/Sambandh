@@ -1,5 +1,0 @@
-XSym
-0078
-5a177fa9f7cc3790a4bdb494e2c20e59
-../../../SocketRocket/SocketRocket/Internal/Security/SRPinningSecurityPolicy.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 

@@ -1,5 +1,0 @@
-XSym
-0082
-3e4e245740d12fe08c22b5a2a8111024
-../../../../../node_modules/react-native-svg/apple/ViewManagers/RNSVGTextManager.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             

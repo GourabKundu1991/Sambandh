@@ -41,6 +41,7 @@
 #import "PropsRegistry.h"
 #import "ReanimatedCommitHook.h"
 #import "ReanimatedCommitShadowNode.h"
+#import "ReanimatedMountHook.h"
 #import "ShadowTreeCloner.h"
 #import "LayoutAnimationsManager.h"
 #import "LayoutAnimationsProxy.h"

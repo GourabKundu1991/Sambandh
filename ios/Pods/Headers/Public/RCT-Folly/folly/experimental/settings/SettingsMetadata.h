@@ -1,5 +1,0 @@
-XSym
-0074
-8493c86fa5ba0a3293c5e658f30e66e5
-../../../../../../RCT-Folly/folly/experimental/settings/SettingsMetadata.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

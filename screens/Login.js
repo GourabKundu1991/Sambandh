@@ -141,13 +141,13 @@ const LoginScreen = ({ navigation, route }) => {
   return (
     <NativeBaseProvider>
       <StatusBar barStyle="dark-content" backgroundColor={"#ffffff"} />
-      <HStack backgroundColor={lightColor} justifyContent="space-between" alignItems="center" paddingX="5" paddingY="3" space={2}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 60 }}>
-          <Icon name="chevron-back" size={26} color="#111111" />
-        </TouchableOpacity>
-      </HStack>
-      <VStack backgroundColor={orgDetails.color} flex={1}>
-        <ScrollView>
+      <ScrollView automaticallyAdjustKeyboardInsets={true} backgroundColor={orgDetails.color}>
+        <HStack backgroundColor={lightColor} justifyContent="space-between" alignItems="center" paddingX="5" paddingY="3" space={2}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 60 }}>
+            <Icon name="chevron-back" size={26} color="#111111" />
+          </TouchableOpacity>
+        </HStack>
+        <VStack backgroundColor={orgDetails.color} flex={1}>
           <VStack flex={1} style={{ overflow: 'hidden', borderBottomLeftRadius: 50, borderBottomRightRadius: 50 }}>
             <LinearGradient
               start={{ x: 0, y: 0 }}
@@ -183,8 +183,8 @@ const LoginScreen = ({ navigation, route }) => {
               />
             </HStack>
           </TouchableOpacity>
-        </ScrollView>
-      </VStack>
+        </VStack>
+      </ScrollView>
       {showLanguageDropdown && (
         <View style={MainStyle.spincontainer}>
           <LinearGradient

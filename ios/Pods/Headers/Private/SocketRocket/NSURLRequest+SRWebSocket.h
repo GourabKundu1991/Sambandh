@@ -1,5 +1,0 @@
-XSym
-0061
-1ccf6e69e48b74257e947eb6873cb46a
-../../../SocketRocket/SocketRocket/NSURLRequest+SRWebSocket.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  

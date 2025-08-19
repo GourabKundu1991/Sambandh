@@ -8,12 +8,3 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
-
-# React Native
-# -keep class com.facebook.react.** { *; }
-# -keep class com.facebook.jni.** { *; }
-# -keep class com.facebook.infer.annotation.** { *; }
-# -keepattributes *Annotation*
-
-# Keep your app's main activity
-# -keep class com.shree.mati.** { *; }

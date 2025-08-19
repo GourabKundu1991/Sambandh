@@ -1,5 +1,0 @@
-XSym
-0072
-d23a465dd897948f983ff260328b5e4c
-../../../../../node_modules/react-native-svg/apple/Filters/RNSVGFilter.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       

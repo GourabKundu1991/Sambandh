@@ -1,5 +1,0 @@
-XSym
-0084
-c27556e8b248461210422d4e905ce33b
-../../../../../node_modules/react-native-svg/apple/ViewManagers/RNSVGSymbolManager.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           

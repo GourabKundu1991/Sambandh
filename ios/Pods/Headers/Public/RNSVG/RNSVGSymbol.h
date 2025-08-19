@@ -1,5 +1,0 @@
-XSym
-0073
-a22bbd9e1ab14eddec92d47a2851d104
-../../../../../node_modules/react-native-svg/apple/Elements/RNSVGSymbol.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      

@@ -1,5 +1,0 @@
-XSym
-0063
-df991f37a855df2a1d2ab8fc26c00fef
-../../../../../node_modules/react-native-svg/apple/RNSVGUIKit.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                

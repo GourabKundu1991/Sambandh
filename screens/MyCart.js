@@ -28,6 +28,8 @@ const CartScreen = ({ navigation }) => {
 
     const [balance, setBalance] = React.useState("");
 
+    const [tdsBlock, setTdsBlock] = React.useState("");
+
     const [msg, setmsg] = React.useState("");
     const [tdsmsg, setTdsMsg] = React.useState("");
 
@@ -99,6 +101,7 @@ const CartScreen = ({ navigation }) => {
                             setAllCart(responseJson.row_items);
                             setControls(responseJson.control);
                             setBalance(responseJson.tds_sufficiency.balance);
+                            setTdsBlock(responseJson.tds_sufficiency);
                             getAllAddress();
                             getState();
                             if (responseJson.contractor_pan_alert == 1) {
@@ -363,6 +366,7 @@ const CartScreen = ({ navigation }) => {
 
     const onYes = () => {
         setAnnouncementPop2(false);
+        setAnnouncementPop(false);
         navigation.navigate('PanUplode');
     }
 
@@ -500,8 +504,8 @@ const CartScreen = ({ navigation }) => {
                                 getAllData();
                                 Toast.show({ description: responseJson.message });
                             } else {
+                                Toast.show({ description: responseJson.message });
                                 if (responseJson.msg_code == "msg_1000") {
-                                    Toast.show({ description: responseJson.message });
                                     setTimeout(function () {
                                         setLoading(false);
                                         AsyncStorage.clear();
@@ -569,8 +573,8 @@ const CartScreen = ({ navigation }) => {
                                 Toast.show({ description: responseJson.message });
                                 getAllData();
                             } else {
+                                Toast.show({ description: responseJson.message });
                                 if (responseJson.msg_code == "msg_1000") {
-                                    Toast.show({ description: responseJson.message });
                                     setTimeout(function () {
                                         setLoading(false);
                                         AsyncStorage.clear();
@@ -705,9 +709,10 @@ const CartScreen = ({ navigation }) => {
             </VStack>
             {controls != "" && (
                 <VStack backgroundColor={"#f0f2e5"} borderTopRadius={30} padding={5} width="100%">
+                    {tdsBlock.is_tds_block == 1 && (
                     <HStack justifyContent={'space-evenly'} alignItems={'center'} borderColor={orgDetails.color} borderWidth={8} backgroundColor={lightColor} borderRadius={40} overflow={'hidden'} padding={1} marginBottom={4}>
                         <VStack alignItems={'center'}>
-                            <Text color="#444444" fontSize="xs" fontWeight="medium">{t("Oredr Value Points")}:</Text>
+                            <Text color="#444444" fontSize="xs" fontWeight="medium">{t("Order Value Points")}:</Text>
                             <Text color="#111111" fontSize="md" fontWeight="bold">{balance.total_point_spent_amount}</Text>
                         </VStack>
                         <VStack alignItems={'center'}>
@@ -719,6 +724,7 @@ const CartScreen = ({ navigation }) => {
                             <Text color="#111111" fontSize="md" fontWeight="bold">{balance.grossup_value}</Text>
                         </VStack>
                     </HStack>
+                    )}
                     <HStack justifyContent="space-between" alignContent="center">
                         <VStack>
                             <Text color="#444444" fontSize="xs" fontWeight="medium">{t("Grand Total")}:</Text>

@@ -1,5 +1,0 @@
-XSym
-0093
-f7ecb1296066b65643ee552c5a809f3d
-../../../../../node_modules/react-native-gesture-handler/apple/RNManualActivationRecognizer.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  

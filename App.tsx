@@ -10,9 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Alert, AppState, AppStateStatus, BackHandler, LogBox, NativeModules, Platform, SafeAreaView } from 'react-native';
-import { PermissionsAndroid } from 'react-native';
-
+import { ActionSheetIOS, Alert, AppState, AppStateStatus, BackHandler, LogBox, Modal, NativeModules, Platform, SafeAreaView } from 'react-native';
 
 import LoginScreen from './screens/Login';
 import HomeScreen from './screens/Home';
@@ -46,13 +44,9 @@ import ComplaintListScreen from './screens/ComplaintList';
 import AddressScreen from './screens/Address';
 import CsiCsoDetailsScreen from './screens/CsiCsoDetails';
 
-
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-
-
-const { SecurityServiceManager } = NativeModules;
 
 const App = () => {
 
@@ -86,7 +80,7 @@ const App = () => {
         <Stack.Screen name="PointStatement" component={PointStatementScreen} />
         <Stack.Screen name="PanUplode" component={PanUploadScreen} />
         <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
-        <Stack.Screen  name="TermsAndConditions" component={TermsConditionsScreen}/>
+        <Stack.Screen name="TermsAndConditions" component={TermsConditionsScreen}/>
         <Stack.Screen name="FAQ" component={FAQScreen} />
         <Stack.Screen name="CounterInfluencers" component={CounterChangeScreen} />
         <Stack.Screen name="RegisterInfluencers" component={RegisterInfluencerScreen} />
@@ -96,14 +90,14 @@ const App = () => {
         <Stack.Screen name="ApproveInfluencers" component={ApproveInfluencerScreen} />
         <Stack.Screen name="ComplaintList" component={ComplaintListScreen} />
         <Stack.Screen name="Address" component={AddressScreen} /> 
-        <Stack.Screen name="CsiCsoDetails" component={CsiCsoDetailsScreen} /> 
+        <Stack.Screen name="CsiCsoDetails" component={CsiCsoDetailsScreen} />
       </Stack.Navigator>
     );
   }
 
   return (
     <NavigationContainer>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#ffffff' }}>
         <Drawer.Navigator
           drawerContent={props => <LeftMenuBarScreen {...props} />}>
           <Drawer.Screen
@@ -115,6 +109,7 @@ const App = () => {
       </SafeAreaView>
     </NavigationContainer>
   );
+
 };
 
 export default App;

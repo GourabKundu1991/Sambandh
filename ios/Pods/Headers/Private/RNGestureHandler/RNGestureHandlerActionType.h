@@ -1,5 +1,0 @@
-XSym
-0091
-9c869a0bd1d5f6838078799832750276
-../../../../../node_modules/react-native-gesture-handler/apple/RNGestureHandlerActionType.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    

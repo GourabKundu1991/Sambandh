@@ -1,5 +1,0 @@
-XSym
-0084
-2e56fe9afbbb44f46859f8eb9fc45be4
-../../../../../../../node_modules/react-native/ReactCommon/react/bridging/Bridging.h
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
