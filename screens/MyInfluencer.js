@@ -1,7 +1,7 @@
 import { Box, HStack, NativeBaseProvider, Text, VStack, Stack, Button, Avatar, Input, Actionsheet, useDisclose, Badge, Divider, Select, CheckIcon, Toast } from 'native-base';
 import React, { useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ActivityIndicator, Alert, Pressable, ScrollView, TouchableOpacity, Image, StatusBar, Dimensions, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, TouchableOpacity, Image, StatusBar, Dimensions, StyleSheet, View, useWindowDimensions, Linking } from 'react-native';
 import { APP_VERSION, AccessToken, BASE_URL, OS_TYPE, hashKey, secretKey, APIkey, API_KEY } from '../auth_provider/Config';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';

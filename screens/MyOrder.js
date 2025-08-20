@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import moment from 'moment';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import StarRating from 'react-native-star-rating-widget';
 
 const ViewOrdersScreen = ({ navigation, route }) => {
 
@@ -34,7 +35,7 @@ const ViewOrdersScreen = ({ navigation, route }) => {
     const [category, setCategory] = React.useState("");
     const [categoryType, setCategoryType] = React.useState("");
     const [description, setDescription] = React.useState("");
-    const [rating, setRating] = React.useState("");
+    const [rating, setRating] = React.useState(0);
     const [image1, setImage1] = React.useState("");
     const [image2, setImage2] = React.useState("");
 
@@ -166,7 +167,7 @@ const ViewOrdersScreen = ({ navigation, route }) => {
             Toast.show({ description: t("Please select Category") });
         } else if (description.trim() == '') {
             Toast.show({ description: t("Please enter Description") });
-        } else if (category.type == 1 && rating == '') {
+        } else if (categoryType == 1 && rating == '') {
             Toast.show({ description: t("Please give some Retings") });
         } else {
             setLoading(true);
@@ -183,7 +184,7 @@ const ViewOrdersScreen = ({ navigation, route }) => {
                     formdata.append("complain_description", description);
                     formdata.append("image1", image1);
                     formdata.append("image2", image2);
-                    formdata.append("rating", rating);
+                    formdata.append("rating", categoryType == 1 ? rating : "");
                     formdata.append("type", categoryType);
                     console.log(formdata);
                     fetch(`${BASE_URL}/submit_complain`, {
@@ -270,7 +271,16 @@ const ViewOrdersScreen = ({ navigation, route }) => {
     const onSelectCate = (cate) => {
         setLoading(true);
         openComplaint(selectedProduct, cate);
-      };
+    };
+
+    const ratingCompleted = (rating) => {
+        console.log("Rating is: " + rating)
+        setRating(rating);
+    }
+
+    const falshclick = (rating) => {
+        console.log("Rating is: " + rating)
+    }
 
     return (
         <NativeBaseProvider>
@@ -303,57 +313,87 @@ const ViewOrdersScreen = ({ navigation, route }) => {
                                 flex={1}
                                 style={{ borderRadius: 30, overflow: 'hidden' }}
                             >
-                                <HStack key={index} space={4} padding={5}>
-                                    <VStack space={2} width={'30%'} alignItems={'center'} marginTop={5}>
-                                        <Box style={{ width: '100%', borderColor: greyColor, borderWidth: 1, height: 100, borderRadius: 6, bottom: 20, overflow: 'hidden' }}>
-                                            {item?.BaseUrl && item?.product_image?.[2]?.product_image && (
-                                                <Image source={{ uri: item.BaseUrl + item.product_image[0].product_image }} style={{ width: '100%', height: 100, resizeMode: 'cover' }} />
-                                            )}
-                                        </Box>
-                                    </VStack>
-                                    <VStack space={1} width={'60%'}>
-                                        <Text fontFamily={fontBold} fontSize="14" color={darkColor}>
-                                            {item.productName}
-                                        </Text>
-                                        <HStack alignContent={'center'}>
-                                            <Box><Text fontSize="14" fontFamily={fontBold} color={darkColor} textAlign={'center'}>{t("Order ID")}: {item.orderId}</Text></Box>
-                                        </HStack>
-                                        <HStack alignContent={'center'}>
-                                            <Text fontFamily={fontBold} fontSize="14" color={darkColor}>{t("Order Item Id")}: {item.orderItemId}</Text>
-                                        </HStack>
-                                        <HStack style={{ justifyContent: "space-between", alignContent: 'center', marginTop: 5 }}>
-                                            <Text fontWeight="bold" fontSize="14" color={darkColor}>
-                                                Grand Total: {item.totalPoints} {t("Points")}
+                                <VStack key={index} padding={5}>
+                                    <HStack space={4}>
+                                        <VStack space={2} width={'30%'} alignItems={'center'} marginTop={5}>
+                                            <Box style={{ width: '100%', borderColor: greyColor, borderWidth: 1, height: 100, borderRadius: 6, bottom: 20, overflow: 'hidden' }}>
+                                                {item?.BaseUrl && item?.product_image?.[2]?.product_image && (
+                                                    <Image source={{ uri: item.BaseUrl + item.product_image[0].product_image }} style={{ width: '100%', height: 100, resizeMode: 'cover' }} />
+                                                )}
+                                            </Box>
+                                        </VStack>
+                                        <VStack space={1} width={'60%'}>
+                                            <Text fontFamily={fontBold} fontSize="14" color={darkColor}>
+                                                {item.productName}
                                             </Text>
-                                        </HStack>
-                                        <HStack alignContent={'center'}>
-                                            <Text fontFamily={fontBold} fontSize="14" color={darkColor}>{t("Date")}: {moment(item.orderInDate).format('DD MMMM, YYYY')}</Text>
-                                        </HStack>
-                                        <HStack alignContent={'center'}>
-                                            <Text fontFamily={fontBold} fontSize="14" color={darkColor}>{t("Status")}: {item.status}</Text>
-                                        </HStack>
-                                        <HStack alignContent={'center'} space={3} marginTop={5} right={5} width={'100%'}>
-                                            <Button variant="outline" size={'xs'} width={120} right={20} borderRadius={30} borderWidth={10} backgroundColor={darkColor} onPress={() => navigation.navigate('OrderDetails', {
-                                                productname: item.productName,
-                                                OrderID: item.orderId,
-                                                OrderItemID: item.orderItemId,
-                                                OrderDate: item.orderInDate,
-                                                pricePoint: item.pricePoint,
-                                                totalPoints: item.totalPoints,
-                                                quantity: item.quantity,
-                                                status: item.status,
-                                                productimage: item.BaseUrl + item.product_image[0].product_image,
-                                            })}>
-                                                <Text color="#bbbbbb" fontFamily={fontBold} fontSize={'16'}>{t("Details")}</Text>
-                                            </Button>
-                                            {item.canRaiseIssue == 1 && (
-                                                <Button variant="outline" size={'xs'} width={150} right={20} borderRadius={30} borderWidth={10} backgroundColor={darkColor} onPress={() => openComplaint(item, category)}>
-                                                    <Text color="#bbbbbb" fontFamily={fontBold} fontSize={'16'}>{t("Complaint")}</Text>
-                                                </Button>
+                                            <HStack alignContent={'center'}>
+                                                <Box><Text fontSize="14" fontFamily={fontBold} color={darkColor} textAlign={'center'}>{t("Order ID")}: {item.orderId}</Text></Box>
+                                            </HStack>
+                                            <HStack alignContent={'center'}>
+                                                <Text fontFamily={fontBold} fontSize="14" color={darkColor}>{t("Order Item Id")}: {item.orderItemId}</Text>
+                                            </HStack>
+                                            <HStack style={{ justifyContent: "space-between", alignContent: 'center', marginTop: 5 }}>
+                                                <Text fontWeight="bold" fontSize="14" color={darkColor}>
+                                                    Grand Total: {item.totalPoints} {t("Points")}
+                                                </Text>
+                                            </HStack>
+                                            <HStack alignContent={'center'}>
+                                                <Text fontFamily={fontBold} fontSize="14" color={darkColor}>{t("Date")}: {moment(item.orderInDate).format('DD MMMM, YYYY')}</Text>
+                                            </HStack>
+                                            <HStack alignContent={'center'}>
+                                                <Text fontFamily={fontBold} fontSize="14" color={darkColor}>{t("Status")}: {item.status}</Text>
+                                            </HStack>
+                                            {item.orderExpectedDate != "" && (
+                                                <HStack alignContent={'center'}>
+                                                    <Text fontFamily={fontBold} fontSize="14" color={darkColor}>{t("Note")}: {item.orderExpectedDate}</Text>
+                                                </HStack>
                                             )}
-                                        </HStack>
-                                    </VStack>
-                                </HStack>
+                                        </VStack>
+                                    </HStack>
+                                    {item.feedbackData != "" && (
+                                        <VStack backgroundColor={"#eeeeee"} borderRadius={10} width="100%" marginTop={5}>
+                                            <VStack justifyContent="space-between" alignContent="center" space={3} padding={3}>
+                                                <VStack>
+                                                    <Text color="#444444" fontSize="xs" fontWeight="medium">{t("Description")}:</Text>
+                                                    <HStack space={1} alignItems="center">
+                                                        <Text color="#111111" fontSize="sm" fontWeight="bold">{item.feedbackData.complain_description}</Text>
+                                                    </HStack>
+                                                </VStack>
+                                                <VStack>
+                                                    <Text color="#444444" fontSize="xs" fontWeight="medium" textAlign={'center'}>{t("Ratings")}:</Text>
+                                                    <StarRating
+                                                        rating={item.feedbackData.rating}
+                                                        enableHalfStar={false}
+                                                        enableSwiping={false}
+                                                        color={successColor}
+                                                        onChange={falshclick}
+                                                        style={{ alignSelf: 'center', marginVertical: 10 }}
+                                                    />
+                                                </VStack>
+                                            </VStack>
+                                        </VStack>
+                                    )}
+                                    <HStack alignContent={'center'} justifyContent={'center'} space={3} marginTop={5} width={'100%'}>
+                                        <Button variant="outline" size={'xs'} width={120} borderRadius={30} borderWidth={10} backgroundColor={darkColor} onPress={() => navigation.navigate('OrderDetails', {
+                                            productname: item.productName,
+                                            OrderID: item.orderId,
+                                            OrderItemID: item.orderItemId,
+                                            OrderDate: item.orderInDate,
+                                            pricePoint: item.pricePoint,
+                                            totalPoints: item.totalPoints,
+                                            quantity: item.quantity,
+                                            status: item.status,
+                                            productimage: item.BaseUrl + item.product_image[0].product_image,
+                                        })}>
+                                            <Text color="#bbbbbb" fontFamily={fontBold} fontSize={'16'}>{t("Details")}</Text>
+                                        </Button>
+                                        {item.canRaiseIssue == 1 && (
+                                            <Button variant="outline" size={'xs'} width={150} borderRadius={30} borderWidth={10} backgroundColor={darkColor} onPress={() => openComplaint(item, category)}>
+                                                <Text color="#bbbbbb" fontFamily={fontBold} fontSize={'16'}>{t("Complaint")}</Text>
+                                            </Button>
+                                        )}
+                                    </HStack>
+                                </VStack>
                             </LinearGradient>
                         ))}
                         {pageNumber > totalPages && (
@@ -381,7 +421,7 @@ const ViewOrdersScreen = ({ navigation, route }) => {
                                 <View style={MainStyle.inputbox}>
                                     <Select variant="unstyled" size="md" placeholder={t("Select Category") + " *"}
                                         selectedValue={category}
-                                        onValueChange={value => {setCategory(value), onSelectCate(value)}}
+                                        onValueChange={value => { setCategory(value), onSelectCate(value) }}
                                         _selectedItem={{
                                             backgroundColor: '#eeeeee',
                                             endIcon: <Icon name="checkmark-circle" size={22} color="#2BBB86" style={{ right: 0, position: 'absolute' }} />
@@ -393,7 +433,23 @@ const ViewOrdersScreen = ({ navigation, route }) => {
                                 </View>
                                 {categoryType == 1 && (
                                     <View style={MainStyle.inputbox}>
-                                        <Input size="md" onChangeText={(text) => setRating(text)} keyboardType='number-pad' variant="unstyled" placeholder={t("Rating") + " *"} />
+                                        <HStack justifyContent={'center'} alignItems={'center'} space={2}>
+                                            <Text style={{ fontSize: 14, color: successColor }} textAlign={'center'}>
+                                                Ratings:
+                                            </Text>
+                                            <HStack>
+                                                <Text style={{ fontSize: 30, fontWeight: 'bold', color: successColor, lineHeight: 40 }}>{rating}</Text>
+                                                <Text style={{ fontSize: 22, lineHeight: 40, color: successColor }}>/5</Text>
+                                            </HStack>
+                                        </HStack>
+                                        <StarRating
+                                            rating={rating}
+                                            onChange={ratingCompleted}
+                                            enableHalfStar={false}
+                                            enableSwiping={false}
+                                            color={successColor}
+                                            style={{ alignSelf: 'center', marginVertical: 10 }}
+                                        />
                                     </View>
                                 )}
                                 <View style={MainStyle.inputbox}>

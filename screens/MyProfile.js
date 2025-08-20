@@ -25,6 +25,11 @@ const ViewProfileScreen = ({ navigation, route }) => {
     const [profileData, setProfileData] = React.useState("");
     const [userId, setUserId] = React.useState("");
 
+    const [userType, setUserType] = React.useState("");
+
+    const [zoomImage, setZoomImage] = React.useState(false);
+    const [imagePath, setImagePath] = React.useState("");
+
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setLoading(true);
@@ -62,6 +67,7 @@ const ViewProfileScreen = ({ navigation, route }) => {
                         if (responseJson.bstatus === 1) {
                             setProfileData(responseJson.profile);
                             setPoints(responseJson.available_point);
+                            setUserType(responseJson.profile.contactHier);
                         } else {
                             Toast.show({description: responseJson.message});
 
@@ -78,6 +84,14 @@ const ViewProfileScreen = ({ navigation, route }) => {
             }
         });
     };
+
+    const openImage = (path) => {
+        console.log(path);
+        setImagePath(path);
+        setTimeout(function () {
+            setZoomImage(true);
+        }, 500);
+    }
 
     return (
         <NativeBaseProvider>
@@ -108,12 +122,13 @@ const ViewProfileScreen = ({ navigation, route }) => {
                                     <Text fontSize="sm" color={orgDetails.name == "Zuari" ? darkColor : lightColor}>
                                         {t("Member ID")}: <Text fontWeight="bold">{userId}</Text>
                                     </Text>
-
+                                    {userType === "Influncer" && (
                                     <Box backgroundColor={lightColor} px={4} py={1} borderRadius={30} mt={3} >
                                         <Text fontSize="md" color={darkColor}>
                                             {t("Available Point:")} <Text color={darkColor} fontWeight={'bold'}> {points} Points</Text>
                                         </Text>
                                     </Box>
+                                    )}
                                 </VStack>
                                 {[
                                     { label: 'Mobile', value: profileData.mobile },
@@ -144,11 +159,13 @@ const ViewProfileScreen = ({ navigation, route }) => {
                                                 <Text fontSize="sm" color={darkGrey} fontFamily={fontSemiBold}>{item.label}:</Text>
 
                                                 {item.isImage ? (
+                                                    <Pressable onPress={() => openImage(item.value)}>
                                                     <Image
                                                         source={{ uri: item.value }}
                                                         style={{ width: 70, height: 70, borderRadius: 8, marginVertical: 10, backgroundColor: greyColor }}
                                                         resizeMode="contain"
                                                     />
+                                                    </Pressable>
                                                 ) : (
                                                     <Text fontSize="sm" fontFamily={fontBold} color={darkColor} textAlign="right">
                                                         {item.value}
@@ -163,6 +180,14 @@ const ViewProfileScreen = ({ navigation, route }) => {
                     </VStack>
                 </ScrollView>
             </VStack>
+            {zoomImage && (
+                <VStack flex={1} style={{ backgroundColor: "rgba(0,0,0,0.85)", zIndex: 99, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={{ uri: imagePath }} style={{ width: '90%', height: 400, marginBottom: 20, resizeMode: 'contain' }} />
+                    <TouchableOpacity onPress={() => setZoomImage(false)}>
+                        <Icon name="close-circle-outline" size={32} color="#ffffff" />
+                    </TouchableOpacity>
+                </VStack>
+            )}
             {loading && (
                 <View style={MainStyle.spincontainer}>
                     <ActivityIndicator animating={loading} size="large" color={warningColor} />

@@ -1,7 +1,7 @@
 import { Box, HStack, NativeBaseProvider, Text, VStack, Stack, Button, Avatar, Input, Actionsheet, useDisclose, Badge, Divider, Select, CheckIcon, Toast } from 'native-base';
 import React, { useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { ActivityIndicator, Alert, Pressable, ScrollView, TouchableOpacity, Image, StatusBar, Dimensions, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, TouchableOpacity, Image, StatusBar, Dimensions, StyleSheet, View, useWindowDimensions, Linking } from 'react-native';
 import { APP_VERSION, AccessToken, BASE_URL, OS_TYPE, hashKey, secretKey, APIkey, API_KEY } from '../auth_provider/Config';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -110,7 +110,7 @@ const InfluencerRedemptionsScreen = ({ navigation, route }) => {
         <NativeBaseProvider>
             <StatusBar barStyle="dark-content" backgroundColor={lightColor} />
             <VStack flex={1} backgroundColor={lightColor}>
-                <HeaderComponents component={t("Approve Influencers")} themeColor={orgDetails.color} navigation={navigation} />
+                <HeaderComponents component={t("Influencers Redemption")} themeColor={orgDetails.color} navigation={navigation} />
                 <ScrollView automaticallyAdjustKeyboardInsets={true}>
                     <VStack padding={5} space={6}>{/* 
                         <View style={MainStyle.inputbox}>

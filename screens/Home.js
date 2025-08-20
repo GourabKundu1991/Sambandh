@@ -1,4 +1,4 @@
-import { Box, HStack, NativeBaseProvider, Text, VStack, Stack, Button, Avatar, Input, Toast } from 'native-base';
+import { Box, HStack, NativeBaseProvider, Text, VStack, Stack, Button, Avatar, Input, Toast, useDisclose, Actionsheet, Select } from 'native-base';
 import React, { useEffect } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ActivityIndicator, Alert, Dimensions, Image, Linking, Pressable, ScrollView, StatusBar, StyleSheet, SafeAreaView, TouchableOpacity, View } from 'react-native';
@@ -12,6 +12,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import Carousel from 'react-native-snap-carousel';
 import CheckBox from '@react-native-community/checkbox';
+import StarRating from 'react-native-star-rating-widget';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+
 
 const HomeScreen = ({ navigation, route }) => {
 
@@ -41,6 +44,22 @@ const HomeScreen = ({ navigation, route }) => {
 
     const [agreedDoc, setAgreedDoc] = React.useState(false);
     const [termsCheck, setTermsCheck] = React.useState(false);
+
+    const [feedbackPOP, setFeedbackPOP] = React.useState(false);
+
+    const [categoryList, setCategoryList] = React.useState([]);
+    const [category, setCategory] = React.useState("");
+    const [categoryType, setCategoryType] = React.useState("");
+    const [description, setDescription] = React.useState("");
+    const [rating, setRating] = React.useState(0);
+    const [image1, setImage1] = React.useState("");
+    const [image2, setImage2] = React.useState("");
+
+    const [imageType, setImageType] = React.useState("");
+
+    const { isOpen, onOpen, onClose } = useDisclose();
+
+    const [orderDetails, setOrderDetails] = React.useState("");
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -94,6 +113,11 @@ const HomeScreen = ({ navigation, route }) => {
                             setCustomerCareNumber(responseJson.helpdesk_number);
                             if (responseJson.tnc_acceptance_pending == 1) {
                                 setTermsPop(true);
+                            }
+                            if (responseJson.showFeedbackPopup == 1) {
+                                setFeedbackPOP(true);
+                                getCategoryData(category);
+                                setOrderDetails(responseJson.orderData);
                             }
                             //setLoading(false);
                             getProfileData();
@@ -241,6 +265,174 @@ const HomeScreen = ({ navigation, route }) => {
                 }
             });
         }
+    }
+
+
+    const getCategoryData = (cate) => {
+        setFeedbackPOP(true);
+        AsyncStorage.getItem('userToken').then(val => {
+            if (val != null) {
+                let formdata = new FormData();
+                formdata.append("token", JSON.parse(val).token);
+                formdata.append("APIkey", `${API_KEY}`);
+                formdata.append("orgId", JSON.parse(val).orgId);
+                formdata.append("categoryId", cate);
+                console.log(formdata);
+                fetch(`${BASE_URL}/get_complain_category`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    body: formdata
+                })
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                        console.log("get_complain_category:", responseJson);
+                        if (responseJson.bstatus === 1) {
+                            setLoading(false);
+                            setCategoryList(responseJson.categories);
+                            setCategoryType(responseJson.type);
+                        } else {
+                            setLoading(false);
+                            Toast.show({ description: responseJson.message });
+                            if (responseJson.msg_code === "msg_1000") {
+                                AsyncStorage.clear();
+                                navigation.replace('Intro');
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        setLoading(false);
+                        //console.log("Verify OTP Error:", error);
+                        Toast.show({ description: t("Sorry! Something went wrong. Maybe network request failed.") });
+                    });
+            }
+        });
+    }
+
+    const closeComplaint = () => {
+        setFeedbackPOP(false);
+        setCategory("");
+        setCategoryType("");
+        setDescription("");
+        setRating(0);
+        setImage1("");
+        setImage2("");
+    }
+
+    const onSubmitComplaint = () => {
+        if (category == '') {
+            Toast.show({ description: t("Please select Category") });
+        } else if (description.trim() == '') {
+            Toast.show({ description: t("Please enter Description") });
+        } else {
+            setLoading(true);
+            AsyncStorage.getItem('userToken').then(val => {
+                if (val != null) {
+                    let formdata = new FormData();
+                    formdata.append("token", JSON.parse(val).token);
+                    formdata.append("APIkey", `${API_KEY}`);
+                    formdata.append("orgId", JSON.parse(val).orgId);
+                    formdata.append("comp_category_id", category);
+                    formdata.append("dcm_orders_id", orderDetails.orderId);
+                    formdata.append("dcm_order_items_id", orderDetails.orderItemId);
+                    formdata.append("dcm_product_id", orderDetails.prod_id);
+                    formdata.append("complain_description", description);
+                    formdata.append("image1", image1);
+                    formdata.append("image2", image2);
+                    formdata.append("rating", categoryType == 1 ? rating : "");
+                    formdata.append("type", categoryType);
+                    fetch(`${BASE_URL}/submit_complain`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        body: formdata
+                    })
+                        .then((response) => response.json())
+                        .then((responseJson) => {
+                            console.log("submit_complain:", responseJson);
+                            if (responseJson.bstatus === 1) {
+                                getAllData();
+                                Toast.show({ description: responseJson.message });
+                                closeComplaint();
+                            } else {
+                                setLoading(false);
+                                Toast.show({ description: responseJson.message });
+                                if (responseJson.msg_code === "msg_1000") {
+                                    AsyncStorage.clear();
+                                    navigation.replace('Intro');
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            setLoading(false);
+                            console.log("submit_complain Error:", error);
+                            Toast.show({ description: t("Sorry! Something went wrong. Maybe network request failed.") });
+                        });
+                }
+            });
+        }
+    }
+
+    const onPickerOpen = (val) => {
+        onOpen();
+        setImageType(val);
+    }
+
+    const openProfilePicker = (type) => {
+        onClose();
+        if (type == "library") {
+            launchImageLibrary(
+                {
+                    mediaType: 'photo',
+                    includeBase64: true,
+                    maxHeight: 1500,
+                    maxWidth: 1500,
+                },
+                (response) => {
+                    //console.log(response);
+                    if (response.assets != undefined) {
+                        if (imageType == "Image1") {
+                            setImage1(response.assets[0].base64);
+                        } else if (imageType == "Image2") {
+                            setImage2(response.assets[0].base64);
+                        }
+                    }
+                },
+            )
+        } else if (type == "camera") {
+            launchCamera(
+                {
+                    mediaType: 'photo',
+                    includeBase64: true,
+                    maxHeight: 1500,
+                    maxWidth: 1500,
+                },
+                (response) => {
+                    //console.log(response.assets);
+                    if (response.assets != undefined) {
+                        if (imageType == "Image1") {
+                            setImage1(response.assets[0].base64);
+                        } else if (imageType == "Image2") {
+                            setImage2(response.assets[0].base64);
+                        }
+                    }
+                },
+            )
+        }
+    }
+
+    const onSelectCate = (cate) => {
+        setLoading(true);
+        setCategory(cate);
+        getCategoryData(cate);
+        setRating(0);
+    };
+
+    const ratingCompleted = (rating) => {
+        console.log("Rating is: " + rating)
+        setRating(rating);
     }
 
     return (
@@ -399,6 +591,97 @@ const HomeScreen = ({ navigation, route }) => {
                     </LinearGradient>
                 </View>
             )}
+            {feedbackPOP && (
+                <View style={MainStyle.spincontainer}>
+                    <LinearGradient
+                        start={{ x: 0, y: 0 }}
+                        colors={["#f0f2e5", "#f0f2e5", "#ffffff"]}
+                        style={{ position: 'relative', width: '80%', borderRadius: 20, overflow: 'hidden' }}
+                    >
+                        <VStack space={6} padding={8} style={{ justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+                                {t("Raise Complaint")}
+                            </Text>
+                            <VStack width={'100%'} space={5}>
+                                <View style={MainStyle.inputbox}>
+                                    <Select variant="unstyled" size="md" placeholder={t("Select Category") + " *"}
+                                        selectedValue={category}
+                                        onValueChange={value => onSelectCate(value)}
+                                        _selectedItem={{
+                                            backgroundColor: '#eeeeee',
+                                            endIcon: <Icon name="checkmark-circle" size={22} color="#2BBB86" style={{ right: 0, position: 'absolute' }} />
+                                        }}>
+                                        {categoryList.map((item, index) =>
+                                            <Select.Item key={index} label={item.category_name} value={item.id} />
+                                        )}
+                                    </Select>
+                                </View>
+                                {categoryType == 1 && (
+                                    <View style={MainStyle.inputbox}>
+                                        <HStack justifyContent={'center'} alignItems={'center'} space={2}>
+                                            <Text style={{ fontSize: 14, color: successColor }} textAlign={'center'}>
+                                                Ratings:
+                                            </Text>
+                                            <HStack>
+                                                <Text style={{ fontSize: 30, fontWeight: 'bold', color: successColor, lineHeight: 40 }}>{rating}</Text>
+                                                <Text style={{ fontSize: 22, lineHeight: 40, color: successColor }}>/5</Text>
+                                            </HStack>
+                                        </HStack>
+                                        <StarRating
+                                            rating={rating}
+                                            onChange={ratingCompleted}
+                                            enableHalfStar={false}
+                                            enableSwiping={false}
+                                            color={successColor}
+                                            style={{ alignSelf: 'center', marginVertical: 10 }}
+                                        />
+                                    </View>
+                                )}
+                                <View style={MainStyle.inputbox}>
+                                    <Input size="md" onChangeText={(text) => setDescription(text)} multiline height={100} textAlignVertical='top' variant="unstyled" placeholder={t("Description") + " *"} />
+                                </View>
+                                <HStack justifyContent={'space-between'} alignItems={'center'}>
+                                    <Stack style={{ width: '48%' }} space={2}>
+                                        <HStack alignItems="center" space={0}>
+                                            <Icon name="attach-outline" size={18} color="#666666" />
+                                            <Text color="#666666" fontSize="sm" textTransform="capitalize">{t("Image 1")}</Text>
+                                        </HStack>
+                                        <View style={[MainStyle.inputbox, { position: 'relative' }]}>
+                                            <Image source={image1 != "" ? { uri: 'data:image/jpeg;base64,' + image1 } : require('../assets/images/noimage.jpg')} alt="image" resizeMode='contain' style={{ width: '100%', height: 120 }} />
+                                            <Pressable onPress={() => onPickerOpen("Image1")} style={{ backgroundColor: 'red', borderRadius: 30, overflow: 'hidden', padding: 10, position: 'absolute', bottom: 5, right: 5 }} justifyContent="center" alignItems="center">
+                                                <Icon name="camera" size={26} color="#ffffff" />
+                                            </Pressable>
+                                        </View>
+                                    </Stack>
+                                    <Stack style={{ width: '48%' }} space={2}>
+                                        <HStack alignItems="center" space={0}>
+                                            <Icon name="attach-outline" size={18} color="#666666" />
+                                            <Text color="#666666" fontSize="sm" textTransform="capitalize">{t("Image 2")}</Text>
+                                        </HStack>
+                                        <View style={[MainStyle.inputbox, { position: 'relative' }]}>
+                                            <Image source={image2 != "" ? { uri: 'data:image/jpeg;base64,' + image2 } : require('../assets/images/noimage.jpg')} alt="image" resizeMode='contain' style={{ width: '100%', height: 120 }} />
+                                            <Pressable onPress={() => onPickerOpen("Image2")} style={{ backgroundColor: 'red', borderRadius: 30, overflow: 'hidden', padding: 10, position: 'absolute', bottom: 5, right: 5 }} justifyContent="center" alignItems="center">
+                                                <Icon name="camera" size={26} color="#ffffff" />
+                                            </Pressable>
+                                        </View>
+                                    </Stack>
+                                </HStack>
+                                <Button style={[MainStyle.solidbtn, { backgroundColor: 'black', width: '100%' }]} onPress={() => onSubmitComplaint()}>
+                                    <Text color={lightColor} fontFamily={fontSemiBold} fontSize="md">{t('Submit')}</Text>
+                                </Button>
+                            </VStack>
+                        </VStack>
+                    </LinearGradient>
+                </View>
+            )}
+            <Actionsheet isOpen={isOpen} onClose={onClose}>
+                <Actionsheet.Content>
+                    <Text color="#666666" fontSize="md" textAlign="center">{t("Select Image Source")}</Text>
+                    <Actionsheet.Item onPress={() => openProfilePicker("library")}>{t("Load from Library")}</Actionsheet.Item>
+                    <Actionsheet.Item onPress={() => openProfilePicker("camera")}>{t("Use Camera")}</Actionsheet.Item>
+                    <Actionsheet.Item onPress={() => openProfilePicker("cancel")}>{t("Cancel")}</Actionsheet.Item>
+                </Actionsheet.Content>
+            </Actionsheet>
             {loading && (
                 <View style={MainStyle.spincontainer}>
                     <ActivityIndicator animating={loading} size="large" color={warningColor} />

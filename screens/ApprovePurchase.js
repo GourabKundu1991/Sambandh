@@ -20,22 +20,6 @@ const ApprovePurchaseScreen = ({ navigation, route }) => {
 
     const [orgDetails, setOrgDetails] = React.useState('');
 
-    const [dataFound, setDataFound] = React.useState("");
-
-    const [isLoadMore, setIsLoadMore] = React.useState(true);
-    const [allProducts, setAllProducts] = React.useState([]);
-    const [inCart, setInCart] = React.useState("");
-    const [allCategory, setAllCategory] = React.useState([]);
-
-    const [canRedeem, setCanRedeem] = React.useState(0);
-    const [canSubmitKYC, setCanSubmitKYC] = React.useState(0);
-    const [canSubmitKYCText, setCanSubmitKYCText] = React.useState("");
-
-    const [loadMoreShow, setLoadMoreShow] = React.useState(0);
-    const [selected, setSelected] = React.useState('All');
-    const [value, setValue] = React.useState('all');
-    const [purchaseData, setPurchaseData] = React.useState([]);
-
 
     const [purchaseList, setPurchaseList] = React.useState([]);
     const [pageNumber, setPageNumber] = React.useState(1);
@@ -94,7 +78,6 @@ const ApprovePurchaseScreen = ({ navigation, route }) => {
                         .then((responseJson) => {
                             console.log("pre_registration:", responseJson);
                             if (responseJson.bstatus == 1) {
-                                setLoading(false);
                                 setTypeList(responseJson.contractors_category);
                             }
                         })

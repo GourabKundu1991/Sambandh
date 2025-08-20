@@ -129,9 +129,16 @@ const PurchaseDetailsScreen = ({ navigation, route }) => {
     }
 
     const handleRejectReasons = () => {
+        if(reasonStatus == "Approve"){
+            var APIname = "approve_sale";
+        } else {
+            var APIname = "reject_sale";
+        }
+        
         if (selectedReason == '') {
             Toast.show({ description: t("Please select Reason Type") });
         } else {
+            setLoading(true);
             AsyncStorage.getItem('userToken').then(val => {
                 if (val) {
                     let formdata = new FormData();
@@ -142,7 +149,7 @@ const PurchaseDetailsScreen = ({ navigation, route }) => {
                     formdata.append("reason_id", selectedReason);
                     formdata.append("other_text", comment);
                     formdata.append("audited", audit);
-                    fetch(`${BASE_URL}/approve_sale`, {
+                    fetch(`${BASE_URL}/` + APIname, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'multipart/form-data',

@@ -37,6 +37,9 @@ const InfluencerDetailsScreen = ({ navigation, route }) => {
     const [points, setPoints] = React.useState("");
     const [userId, setUserId] = React.useState("");
 
+    const [zoomImage, setZoomImage] = React.useState(false);
+    const [imagePath, setImagePath] = React.useState("");
+
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setLoading(true);
@@ -107,6 +110,13 @@ const InfluencerDetailsScreen = ({ navigation, route }) => {
         });
     };
 
+    const openImage = (path) => {
+        console.log(path);
+        setImagePath(path);
+        setTimeout(function () {
+            setZoomImage(true);
+        }, 500);
+    }
 
     return (
         <NativeBaseProvider>
@@ -168,11 +178,13 @@ const InfluencerDetailsScreen = ({ navigation, route }) => {
                                                 <Text fontSize="sm" color={darkGrey} fontFamily={fontSemiBold}>{item.label}:</Text>
 
                                                 {item.isImage ? (
-                                                    <Image
-                                                        source={{ uri: item.value }}
-                                                        style={{ width: 70, height: 70, borderRadius: 8, marginVertical: 10, backgroundColor: greyColor }}
-                                                        resizeMode="contain"
-                                                    />
+                                                    <Pressable onPress={() => openImage(item.value)}>
+                                                        <Image
+                                                            source={{ uri: item.value }}
+                                                            style={{ width: 70, height: 70, borderRadius: 8, marginVertical: 10, backgroundColor: greyColor }}
+                                                            resizeMode="contain"
+                                                        />
+                                                    </Pressable>
                                                 ) : (
                                                     <Text fontSize="sm" fontFamily={fontBold} color={darkColor} textAlign="right">
                                                         {item.value}
@@ -187,6 +199,14 @@ const InfluencerDetailsScreen = ({ navigation, route }) => {
                     </VStack>
                 </ScrollView>
             </VStack>
+            {zoomImage && (
+                <VStack flex={1} style={{ backgroundColor: "rgba(0,0,0,0.85)", zIndex: 99, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={{ uri: imagePath }} style={{ width: '90%', height: 400, marginBottom: 20, resizeMode: 'contain' }} />
+                    <TouchableOpacity onPress={() => setZoomImage(false)}>
+                        <Icon name="close-circle-outline" size={32} color="#ffffff" />
+                    </TouchableOpacity>
+                </VStack>
+            )}
             {loading && (
                 <View style={MainStyle.spincontainer}>
                     <ActivityIndicator animating={loading} size="large" color={warningColor} />
